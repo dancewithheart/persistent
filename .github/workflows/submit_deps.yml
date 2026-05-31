@@ -126,8 +126,6 @@ jobs:
         run: |
           CABAL_AUDIT="$(cd ../cabal-audit && cabal list-bin exe:cabal-audit | tail -n 1)"
           "$CABAL_AUDIT" --sarif --to-file ../cabal-audit.sarif
-          echo "First lines of cabal-audit SARIF:"
-          head -n 5 ../cabal-audit.sarif
           jq type ../cabal-audit.sarif
 
       - name: Enrich cabal-audit SARIF with Cabal dependency paths
@@ -150,13 +148,13 @@ jobs:
             > ../deprecated-packages.sarif
 
       - name: Upload enriched cabal-audit SARIF
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: cabal-audit.enriched.sarif
           category: cabal-audit-enriched
 
       - name: Upload deprecated-package SARIF
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: deprecated-packages.sarif
           category: hackage-deprecated-packages
